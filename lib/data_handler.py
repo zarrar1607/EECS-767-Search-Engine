@@ -25,21 +25,23 @@ def check_robots(url):
 # Grabbing all links in the URL
 def get_links(url):
     # get the webpage using requests
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        print(f'Error fetching {url}: {e}')
+        pass
     # parse the webpage with BeautifulSoup
     soup = BeautifulSoup(response.text, 'html.parser')
     #print(soup)
-    links = []
     # find all links in the webpage
     links = []
     for link in soup.find_all('a'):
         href = link.get('href')
         try:
-            if href.startswith('/') and not href.startswith('#') and href not in disallowed_paths:
+            if (href.startswith('/co/'))and not href.startswith('#') and href not in disallowed_paths:
                 #print(url+href)
-                links.append(href)
+                links.append(url+href)
         except AttributeError:
             pass
-
     return links
 

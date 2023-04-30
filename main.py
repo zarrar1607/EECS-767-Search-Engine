@@ -1,7 +1,7 @@
 '''
 Author 1: Vamsi 
 Author 2: Zarrar
-All is self hand coded
+Every caharacter is self hand coded
 '''
 '''
 Preparing the documents
@@ -10,6 +10,7 @@ Calculate the similarities between query and documents using Cosine Similarity
 Retrieve the articles that have the highest similarity on it.
 '''
 from lib.data_handler import *
+from collections import deque
 #from libs.search import *
 #from libs.indexing import *
 #import time
@@ -27,7 +28,7 @@ from lib.data_handler import *
 #uniquewords = []
 #df = []
 #robots=[]
-#dontVisit=[]
+#dontVisit=[] - Done
 #Document processing and indexing
 #vector space model
 #Niche crawler
@@ -37,7 +38,7 @@ from lib.data_handler import *
 #import requests
 #from bs4 import BeautifulSoup
 
-# get_links from a url
+# get_links from a url - Done
 # Niche crawl
 # Process Robots
 # Crawler on  URL Frontier
@@ -46,6 +47,25 @@ from lib.data_handler import *
 # Save the Data that was created on parsing earlier
 # Load Data
 # search -> Querry
+url_frontier = []
+url_visited = set()
+def niche_crawl(url, max_depth=1):
+    if not max_depth:
+        return
+    
+    if url not in url_visited:
+        url_frontier.append(url)
+    
+    links = get_links(url=url)
+    
+    for link in links:
+        if link in url_visited:
+            continue
+        url_visited.add(link)
+        if link not in url_frontier:
+            url_frontier.append(link)
+        niche_crawl(url=link, max_depth=max_depth-1)
+    
 
 '''
 inp = input('>> ')
@@ -76,8 +96,8 @@ while inp !='launch':
 # search('vegetarian recipe burst flavour plus information substitution and food')
 
 #check_robots('https://www.ziprecruiter.com')
-#print(f"Links:\n\n{get_links('https://www.ziprecruiter.com')}")
-
+niche_crawl('https://www.ziprecruiter.com', 1)
+print(f"Links:\n\n{url_frontier}")
 
 
 
