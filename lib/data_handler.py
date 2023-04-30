@@ -45,3 +45,18 @@ def get_links(url):
             pass
     return links
 
+
+
+def get_content(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'lxml')
+    
+    content = []
+    job_title = soup.find_all('h2')
+    para = soup.find_all('p')
+    for j in job_title:
+        content.append(j.text)
+    for p in para:
+        if not p.text.lower().startswith('last updated'):
+            content.append(p.text)
+    return content

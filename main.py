@@ -76,7 +76,9 @@ def niche_crawl(url, max_depth=1):
             url_frontier.append(link)
         # Recursively call the niche_crawl function with the new link and a depth of one less than the current depth
         niche_crawl(url=link, max_depth=max_depth-1)
-    
+
+
+
 
 '''
 inp = input('>> ')
@@ -107,8 +109,13 @@ while inp !='launch':
 # search('vegetarian recipe burst flavour plus information substitution and food')
 
 #check_robots('https://www.ziprecruiter.com')
-niche_crawl('https://www.ziprecruiter.com', 1)
+#niche_crawl('https://www.ziprecruiter.com', 1)
+url = 'https://www.ziprecruiter.com'
+url = 'https://www.ziprecruiter.com/co/ADP/Jobs'
+niche_crawl(url=url, max_depth= 1)
 print(f"Links:\n\n{url_frontier}")
+print(f"\n\nContent:\n {get_content(url=url)}")
+
 
 
 
