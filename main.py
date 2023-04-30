@@ -75,8 +75,8 @@ while inp !='launch':
 # saveLoad()
 # search('vegetarian recipe burst flavour plus information substitution and food')
 
-processRobots('https://www.ziprecruiter.com/')
-#print(f"Links:\n\n{getLinks('https://www.ziprecruiter.com/jobs-search')}")
+#check_robots('https://www.ziprecruiter.com')
+#print(f"Links:\n\n{get_links('https://www.ziprecruiter.com')}")
 
 
 

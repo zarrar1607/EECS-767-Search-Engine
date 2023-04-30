@@ -4,43 +4,42 @@ import pandas as pd
 
 disallowed_paths = []
 
-# Grabbing all links in the URL
-def getLinks(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    content = response.content
-    job_listings = soup.find_all('tr', {'id': lambda x: x and x.endswith('BR')})
-    links = []
-    '''
-    for link in soup.find_all('a'):
-        href = link.get('href')
-        try:
-            if href.startswith('/') and href not in dontVisit:
-                links.append(url+href)
-        except AttributeError:
-            pass
-    '''
-    for i in soup.find_all('a'):
-        #i['href'] = i['href'] + '?page=all'
-        links.append(i)#i['href'])
-    return links
+# Checking Robot
+def check_robots(url):
+    robots_url = url+'/robots.txt'
+    response = requests.get(robots_url)
 
-def processRobots(url):
-    robot = requests.get(url)
-    
-    soup = BeautifulSoup(robot.text, "html.parser")
+    robots_txt = response.text
+    soup = BeautifulSoup(robots_txt, "lxml")
     #print(soup)
+    
     # find all disallowed paths
     for line in soup.get_text().split('\n'):
         if line.startswith('Disallow:'):
             path = line.split(': ')[1].strip()
             disallowed_paths.append(path)
 
-    print(disallowed_paths)
-    #print(type(soup.text))
-    '''
-    for line in soup.text.split('\n'):
-         if line.startswith("Disallow"):
-            dontVisit.append(line.split()[1])
-    '''
- 
+    #print(f'Disallowed Path: \n{disallowed_paths}')
+    
+
+# Grabbing all links in the URL
+def get_links(url):
+    # get the webpage using requests
+    response = requests.get(url)
+    # parse the webpage with BeautifulSoup
+    soup = BeautifulSoup(response.text, 'html.parser')
+    #print(soup)
+    links = []
+    # find all links in the webpage
+    links = []
+    for link in soup.find_all('a'):
+        href = link.get('href')
+        try:
+            if href.startswith('/') and not href.startswith('#') and href not in disallowed_paths:
+                #print(url+href)
+                links.append(href)
+        except AttributeError:
+            pass
+
+    return links
+
