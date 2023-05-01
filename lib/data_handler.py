@@ -1,6 +1,15 @@
-from bs4 import BeautifulSoup
+import re
+import nltk
+import string
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
+from nltk import pos_tag
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+
 
 disallowed_paths = []
 
@@ -39,17 +48,15 @@ def get_links(url):
         href = link.get('href')
         try:
             if (href.startswith('/co/'))and not href.startswith('#') and href not in disallowed_paths:
-                #print(url+href)
+                print(url+href)
                 links.append(url+href)
         except AttributeError:
             pass
     return links
 
-
-
 def get_content(url):
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = BeautifulSoup(response.text, 'html.parser')
     
     content = []
     job_title = soup.find_all('h2')
@@ -59,4 +66,49 @@ def get_content(url):
     for p in para:
         if not p.text.lower().startswith('last updated'):
             content.append(p.text)
-    return content
+    return soup.text#content
+
+
+
+
+def preprocess_text(text):
+    # Tokenize text
+    tokens = word_tokenize(text)
+    
+    # Convert to lowercase
+    tokens = [token.lower() for token in tokens]
+
+    # Define stopwords and stemmer
+    stop_words = set(stopwords.words('english'))
+    stemmer = SnowballStemmer('english')
+    
+    # Remove stop words and punctuation
+    tokens = [token for token in tokens if token not in stop_words and token not in string.punctuation]
+    
+    # Stem words
+    tokens = [stemmer.stem(token) for token in tokens]
+    '''
+    lemmatizer = WordNetLemmatizer()
+    words = [lemmatizer.lemmatize(t) for t in tokens]
+    tagged_words = pos_tag(words)
+    tagged_words = [(word, tag) for word, tag in tagged_words if tag.startswith('N') or tag.startswith('V') or tag.startswith('J') or tag.startswith('R')]
+    doc = ' '.join([word for word, tag in tagged_words])
+    '''
+    # Return preprocessed text as a single string
+    return ' '.join(tokens)
+
+
+def save_as_text(text_list, file_name):
+    with open(f'./data/{file_name}.txt', 'w') as f:
+        f.write('\n'.join(text_list))
+
+def load_from_txt(file_name):
+    with open(f'./data/{file_name}.txt', 'r') as f:
+        text_list = f.read().splitlines()
+    return text_list
+
+def save_table(df, file_name):
+    df.to_csv(f'./data/{file_name}.csv')
+
+def load_table(file_name):
+    return pd.read_csv(f'./data/{file_name}.csv', index_col=0)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        p {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+    {% if query %}
+        {% for index, row in titles.iterrows() %}
+            <p><a href="{{ row['doc_id'] }}">{% print(row['doc_id']) %}</a> : {% print(row['0']) %}</p> 
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</body>
+</html>
