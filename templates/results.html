@@ -23,7 +23,7 @@
     </style>
 </head>
 <body>
-    <h1>Search Results</h1>
+    <h1>Search Results - {% print(time) %} seconds</h1>
     {% if query %}
         {% for index, row in titles.iterrows() %}
             <p><a href="{{ row['doc_id'] }}">{% print(row['doc_id']) %}</a> : {% print(row['0']) %}</p> 

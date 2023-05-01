@@ -56,19 +56,9 @@ def get_links(url):
 
 def get_content(url):
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    content = []
-    job_title = soup.find_all('h2')
-    para = soup.find_all('p')
-    for j in job_title:
-        content.append(j.text)
-    for p in para:
-        if not p.text.lower().startswith('last updated'):
-            content.append(p.text)
-    return soup.text#content
-
-
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    return text
 
 
 def preprocess_text(text):
@@ -80,16 +70,20 @@ def preprocess_text(text):
 
     # Define stopwords and stemmer
     stop_words = set(stopwords.words('english'))
-    stemmer = SnowballStemmer('english')
+    lemmatizer = WordNetLemmatizer()
+
     
     # Remove stop words and punctuation
     tokens = [token for token in tokens if token not in stop_words and token not in string.punctuation]
     
-    # Stem words
-    tokens = [stemmer.stem(token) for token in tokens]
+    # Lem words
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+
     '''
-    lemmatizer = WordNetLemmatizer()
-    words = [lemmatizer.lemmatize(t) for t in tokens]
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    nltk.download('averaged_perceptron_tagger')
     tagged_words = pos_tag(words)
     tagged_words = [(word, tag) for word, tag in tagged_words if tag.startswith('N') or tag.startswith('V') or tag.startswith('J') or tag.startswith('R')]
     doc = ' '.join([word for word, tag in tagged_words])

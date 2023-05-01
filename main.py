@@ -13,12 +13,7 @@ from lib.data_handler import *
 from lib.indexer import *
 from lib.query_processor import *
 from collections import deque
-#import time
-#from libs.saveLoad import *
-#from bs4 import BeautifulSoup
-#import xml.etree.ElementTree as ET
-#import requests
-#import time
+import time
 
 
 # Document processing and indexing - Done
@@ -110,7 +105,6 @@ while inp !='launch':
 #print(f"\n\nContent:\n {get_content(url=url)}")
 # code for scrapping from the links 
 
-'''
 
 import requests
 from bs4 import BeautifulSoup
@@ -178,26 +172,37 @@ for i in job_links:
     r = r+1
 
 
+
+
+
+start_time = time.time()
+
+url = 'https://employment.ku.edu/jobs/'
 documents = preproc_docs
 
 for key, value in documents.items():
     documents[key] = preprocess_text(value)
 
 inverted_index = build_inverted_index(documents)
-print(f'inverted_index:\n {inverted_index.head()}')
+#print(f'inverted_index:\n {inverted_index.head()}')
 
 tf_idf_table = create_tf_idf(inverted_index)
 print(f'tf_idf_table:\n {tf_idf_table.head()}')
 
-'''
+# Code to be timed
+
+end_time = time.time()
+
+elapsed_time = end_time - start_time
+
+print(f"---> Elapsed time to make Vector Space Model: {elapsed_time: .2f} seconds <----")
+print(f'-----------Sample Querry-------------')
 
 # Sample query
 query = "Desk Job"
-documents = pd.read_csv('./data/document.csv')
 tfidf_table = pd.read_csv('./data/tf_idf.csv', index_col=0)
 
-print(documents.head())
-print(tfidf_table)
+print(tfidf_table.head(10))
 
 
 # Perform the query search
