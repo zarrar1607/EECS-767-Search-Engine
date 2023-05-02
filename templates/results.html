@@ -6,6 +6,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            align-items: center; /* centers children vertically */
+            justify-content: center; /* centers children horizontally */
+            height: 100vh; 
         }
         h1 {
             font-size: 24px;
@@ -20,16 +25,67 @@
         p {
             margin-top: 0;
         }
+        
+        form {
+          width: 80%;
+          max-width: 600px;
+          padding: 20px;
+          background-color: white;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          
+        }
+        
+        label, input {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        
+        input[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+          background-color: #3e8e41;
+        }
+        .scrollable{
+            width: 80%;
+          max-width: 600px;
+          padding: 20px;
+          background-color: white;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          color: #3e8e41;
+          height: 600px; /* specify height */
+          overflow: auto; /* add scrollbar */
+        }
+        div{
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>Search Results - {% print(time) %} seconds</h1>
-    {% if query %}
+    <form action="/search" method="post">
+        <label for="query"><h1>KU Job Search Engine:</h1></label><br>
+        <input type="text" id="query" name="query" placeholder="Enter your querry" required><br>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    <div><h1>Search Results - {% print(time) %} seconds</h1></div>
+    <div class="scrollable">
+        {% if query %}
         {% for index, row in titles.iterrows() %}
-            <p><a href="{{ row['doc_id'] }}">{% print(row['doc_id']) %}</a> : {% print(row['0']) %}</p> 
+            <p><a href="{{ row['doc_id'] }}">{% print(row['doc_id']) %}</a></p> <p> Cosine Similarity: {% print(row['0']) %}</p> 
         {% endfor %}
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div> 
 </body>
 </html>

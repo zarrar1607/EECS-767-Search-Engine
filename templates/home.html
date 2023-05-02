@@ -2,12 +2,52 @@
 <html>
 <head>
     <title>Document Search</title>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f2f2f2;
+        }
+        
+        form {
+          width: 80%;
+          max-width: 600px;
+          padding: 20px;
+          background-color: white;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        label, input {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+        
+        input[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+          background-color: #3e8e41;
+        }
+      </style>
 </head>
+
 <body>
-    <h1>KU Job Search</h1>
+    
     <form action="/search" method="post">
-        <label for="query">Enter your search query:</label><br>
-        <input type="text" id="query" name="query"><br>
+        <label for="query"><h1>KU Job Search Engine:</h1></label><br>
+        <input type="text" id="query" name="query" placeholder="Enter your querry" required><br>
         <br>
         <input type="submit" value="Submit">
     </form>
